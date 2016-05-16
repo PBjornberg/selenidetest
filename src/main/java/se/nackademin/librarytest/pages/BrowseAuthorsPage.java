@@ -9,13 +9,14 @@ import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
- * @author testautomatisering
+ *
+ * @author administrator
  */
-public class BrowseBooksPage extends MenuPage {
+public class BrowseAuthorsPage {
     @FindBy(css = "#gwt-uid-3")
-    private SelenideElement titleField;
-    @FindBy(css = "#search-books-button")
-    private SelenideElement searchBooksButton;
+    private SelenideElement nameField;
+    @FindBy(css = "#search-authors-button")
+    private SelenideElement searchAuthorsButton;
     @FindBy(css = "td.v-grid-cell:nth-child(1) > a:nth-child(1)")
     private SelenideElement firstResultTitle;
 
@@ -23,11 +24,12 @@ public class BrowseBooksPage extends MenuPage {
         firstResultTitle.click();
     }
 
-    public void setTitleField(String title) {
-        setTextFieldValue("title field", title, titleField);
+    public void setNameField(String title) {
+        nameField.clear();
+        nameField.sendKeys(title);
     }
 
-    public void clickSearchBooksButton() {
-        searchBooksButton.click();
-    }
+    public void clickSearchAuthorsButton() {
+        searchAuthorsButton.click();
+    }    
 }

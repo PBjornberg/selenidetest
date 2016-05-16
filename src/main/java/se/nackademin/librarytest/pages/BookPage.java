@@ -11,14 +11,19 @@ import org.openqa.selenium.support.FindBy;
 /**
  * @author testautomatisering
  */
-public class BookPage {
+public class BookPage extends MenuPage {
 
     @FindBy(css = "#gwt-uid-3")
-    SelenideElement titleField;
+    private SelenideElement titleField;
     @FindBy(css = "#gwt-uid-5")
-    SelenideElement authorField;
+    private SelenideElement authorField;
     @FindBy(css = "#gwt-uid-7")
-    SelenideElement descriptionField;
+    private SelenideElement descriptionField;
+    @FindBy(css = "#gwt-uid-11")
+    private SelenideElement datePublishedField;    
+    @FindBy(css = "#edit-book-button")
+    private SelenideElement editBookButton;
+    
 
     public String getTitle() {
         return titleField.getText();
@@ -31,4 +36,12 @@ public class BookPage {
     public String getDescription() {
         return descriptionField.getText();
     }
+    
+    public String getDatePublished() {
+        return datePublishedField.getText();
+    }
+    
+    public void clickEditBookButton() {
+        clickButton("edit book button", editBookButton);
+    }    
 }

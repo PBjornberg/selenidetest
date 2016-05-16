@@ -13,11 +13,11 @@ import org.openqa.selenium.support.FindBy;
  */
 public class SignInPage extends MenuPage {
     @FindBy(css = "#input-username")
-    SelenideElement userNameField;
+    private SelenideElement userNameField;
     @FindBy(css = "#input-password")
-    SelenideElement passwordField;
+    private SelenideElement passwordField;
     @FindBy(css = "#login-button")
-    SelenideElement logInButton;
+    private SelenideElement logInButton;
 
     public void setUsername(String username) {
         userNameField.clear();

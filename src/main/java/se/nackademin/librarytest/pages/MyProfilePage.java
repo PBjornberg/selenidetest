@@ -13,9 +13,44 @@ import org.openqa.selenium.support.FindBy;
  */
 public class MyProfilePage extends MenuPage {
     @FindBy(css = "#gwt-uid-5")
-    SelenideElement userNameField;
+    private SelenideElement userNameField;
+
+    @FindBy(css = "#gwt-uid-7")
+    private SelenideElement firstNameField;
+    
+    @FindBy(css = "#gwt-uid-9")
+    private SelenideElement lastNameField;
+
+    @FindBy(css = "#gwt-uid-11")
+    private SelenideElement phoneNbrField;    
+    
+    @FindBy(css = "#gwt-uid-13")
+    private SelenideElement emailField;        
+    
+    @FindBy(css = "#edit-user")
+    private SelenideElement editUserButton;    
 
     public String getUserName() {
         return userNameField.getText();
     }
+
+    public String getFirstName() {
+        return firstNameField.getText();
+    }
+
+    public String getLastName() {
+        return lastNameField.getText();
+    }    
+    
+    public String getPhoneNbr() {
+        return phoneNbrField.getText();
+    }
+    
+    public String getEmail() {
+        return emailField.getText();
+    }
+    
+    public void clickEditUserButton() {
+        editUserButton.click();
+    }   
 }
