@@ -7,4 +7,4 @@ Uppgift 2 Skapa en ny användare
 
 Uppgift 3 Ändra publiceringsdatum
 
-Uppgift 4 Låna en bok (Ej gjord!)
+Uppgift 4 Låna en bok

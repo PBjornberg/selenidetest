@@ -28,7 +28,11 @@ public class MyProfilePage extends MenuPage {
     private SelenideElement emailField;        
     
     @FindBy(css = "#edit-user")
-    private SelenideElement editUserButton;    
+    private SelenideElement editUserButton;
+
+    @FindBy(css = "td.v-grid-cell:nth-child(1) > a:nth-child(1)")
+    private SelenideElement firstResultTitle;
+    
 
     public String getUserName() {
         return userNameField.getText();
@@ -52,5 +56,9 @@ public class MyProfilePage extends MenuPage {
     
     public void clickEditUserButton() {
         editUserButton.click();
-    }   
+    }
+    
+    public void clickFirstResultTitle() {
+        firstResultTitle.click();
+    }    
 }

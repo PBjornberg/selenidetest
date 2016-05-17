@@ -20,9 +20,20 @@ public class BookPage extends MenuPage {
     @FindBy(css = "#gwt-uid-7")
     private SelenideElement descriptionField;
     @FindBy(css = "#gwt-uid-11")
-    private SelenideElement datePublishedField;    
+    private SelenideElement datePublishedField;  
+    @FindBy(css = "#gwt-uid-13")
+    private SelenideElement nbrOfCopiesAvailableField;  
+    
+    // The leftmost button is prefixed either "borrow" or "return" depending on the books status.
+    @FindBy(css = "#borrow-book-button")
+    private SelenideElement borrowBookButton;  
+    @FindBy(css = "#return-book-button")
+    private SelenideElement returnBookButton; 
+    
     @FindBy(css = "#edit-book-button")
     private SelenideElement editBookButton;
+    @FindBy(css="#confirmdialog-ok-button")
+    private SelenideElement confirmDialogOKButton;  
     
 
     public String getTitle() {
@@ -40,6 +51,22 @@ public class BookPage extends MenuPage {
     public String getDatePublished() {
         return datePublishedField.getText();
     }
+
+    public String getNbrOfCopiesAvailable() {
+        return nbrOfCopiesAvailableField.getText();
+    }    
+    
+    public void clickBorrowBookButton() {
+        clickButton("borrow book button", borrowBookButton);
+    } 
+    
+    public void clickReturnBookButton() {
+        clickButton("return book button", returnBookButton);
+    } 
+    
+    public void clickConfirmDialogOKButton() {
+        clickButton("confirm dialog OK button", confirmDialogOKButton);
+    }    
     
     public void clickEditBookButton() {
         clickButton("edit book button", editBookButton);

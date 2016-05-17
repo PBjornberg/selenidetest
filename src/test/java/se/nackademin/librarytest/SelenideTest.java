@@ -1,24 +1,26 @@
 package se.nackademin.librarytest;
 
-import static com.codeborne.selenide.Selenide.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 import static org.junit.Assert.assertEquals;
-import org.junit.Ignore;
 
 
 import org.junit.Test;
 import se.nackademin.librarytest.helpers.AuthorHelper;
 import se.nackademin.librarytest.helpers.BookHelper;
 
-import se.nackademin.librarytest.helpers.Table;
 import se.nackademin.librarytest.helpers.UserHelper;
 import se.nackademin.librarytest.model.Author;
 import se.nackademin.librarytest.model.User;
-import se.nackademin.librarytest.pages.BrowseBooksPage;
+import se.nackademin.librarytest.pages.BookPage;
 import se.nackademin.librarytest.pages.MenuPage;
+import se.nackademin.librarytest.pages.MyProfilePage;
+import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.Selenide.page;
+import static org.junit.Assert.assertEquals;
+import static com.codeborne.selenide.Selenide.page;
 
 public class SelenideTest extends TestBase {
 
@@ -78,12 +80,17 @@ public class SelenideTest extends TestBase {
         final String newEmail = "fornman.efternamn@mailserver.com";
         User user;
         
+        // Create user
         UserHelper.createNewUser(uuid, uuid, "firstname", "lastname", "010 - 12345678", oldEmail);
-        user = UserHelper.fetchUser(uuid, uuid);
         
+        // Verify email is correctly set
+        user = UserHelper.fetchUser(uuid, uuid);        
         assertEquals(oldEmail, user.getEmail());
+        
+        // Update user's email
         UserHelper.updateLoggedInUser(null, null, null, null, newEmail);
 
+        // Verify email has changed
         user = UserHelper.fetchUser(uuid, uuid);
         assertEquals(newEmail, user.getEmail());        
     }
@@ -105,9 +112,51 @@ public class SelenideTest extends TestBase {
         // We dont know for sure what "date published" the book has
         // Therefore, we must change the value twice
         BookHelper.editBook(bookTitle, null, null, null, null, null, todaysDate);         
-        assertEquals(todaysDate, BookHelper.fetchBook(bookTitle).getDatePublished());
+        assertEquals(todaysDate, BookHelper.fetchBookPage(bookTitle).getDatePublished());
 
         BookHelper.editBook(bookTitle, null, null, null, null, null, originalDatePublished);
-        assertEquals(originalDatePublished, BookHelper.fetchBook(bookTitle).getDatePublished());
+        assertEquals(originalDatePublished, BookHelper.fetchBookPage(bookTitle).getDatePublished());
     }
+    
+    /**
+    * Låna en bok
+    */
+    @Test
+    public void testCreateUserAndBorrowBook(){
+
+        final String uuid = UUID.randomUUID().toString();
+        UserHelper.createNewUser(uuid, uuid, "firstname", "lastname", "010 - 12345678", "mail.address@server.com");
+        UserHelper.logInAsUser(uuid, uuid);
+
+        final String bookTitle = "Coraline";
+        BookPage bookPage;
+        
+        // Save the number of available books
+        bookPage = BookHelper.fetchBookPage(bookTitle);
+        int originalNbrOfCopiesAvailable = Integer.parseInt(bookPage.getNbrOfCopiesAvailable()); 
+        
+        // Borrow book
+        BookHelper.borrowBook(bookTitle);
+
+        // Verify that the number of available boos is decremeted by one
+        // For some reason, we need to wait a moment
+        sleep(1000);
+        assertEquals("Number of copies availabe is not decremented", originalNbrOfCopiesAvailable - 1, Integer.parseInt(bookPage.getNbrOfCopiesAvailable()));
+        
+        MenuPage menuPage = page(MenuPage.class);
+        menuPage.navigateToMyProfile();        
+        MyProfilePage myProfilePage = page(MyProfilePage.class); 
+        myProfilePage.clickFirstResultTitle();   
+        assertEquals(bookTitle, bookPage.getTitle());
+        
+        // Return book
+        BookHelper.returnBook(bookTitle);
+        
+        // Verify that the number of available boos is restored to original value
+        // For some reason, we need to wait a moment        
+        sleep(1000);
+        assertEquals("Number of copies availabe is wrong", originalNbrOfCopiesAvailable, Integer.parseInt(bookPage.getNbrOfCopiesAvailable()));
+        
+    }
+    
 }

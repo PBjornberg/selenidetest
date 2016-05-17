@@ -5,24 +5,26 @@
  */
 package se.nackademin.librarytest.helpers;
 
-import static com.codeborne.selenide.Selenide.page;
 
-import se.nackademin.librarytest.model.Book;
 import se.nackademin.librarytest.pages.BookPage;
 import se.nackademin.librarytest.pages.BrowseBooksPage;
 import se.nackademin.librarytest.pages.EditBookPage;
 import se.nackademin.librarytest.pages.MenuPage;
+import static com.codeborne.selenide.Selenide.page;
 
 /**
  * @author testautomatisering
  */
 public class BookHelper {
 
-    public static void addNewBook(Book book) {
-
-    }
-
-    public static Book fetchBook(String searchQuery) {
+    /**
+     * This method returns a BookPage (instead of a Book transfer object)
+     * The use of BookPage allows code reuse, which simplifies BookHelper class
+     * 
+     * @param searchQuery
+     * @return 
+     */
+    public static BookPage fetchBookPage(String searchQuery) {
         MenuPage menuPage = page(MenuPage.class);
         menuPage.navigateToBrowseBooks();
         BrowseBooksPage browseBooksPage = page(BrowseBooksPage.class);
@@ -31,12 +33,7 @@ public class BookHelper {
         browseBooksPage.clickFirstResultTitle();
 
         BookPage bookPage = page(BookPage.class);
-        Book book = new Book();
-        book.setTitle(bookPage.getTitle());
-        book.setAuthor(bookPage.getAuthor());
-        book.setDescription(bookPage.getDescription());
-        book.setDatePublished(bookPage.getDatePublished());
-        return book;
+        return bookPage;
     }
     
     /**
@@ -59,15 +56,7 @@ public class BookHelper {
             String numberInInventory,
             String datePublished) {
         
-        
-        MenuPage menuPage = page(MenuPage.class);
-        menuPage.navigateToBrowseBooks();
-        BrowseBooksPage browseBooksPage = page(BrowseBooksPage.class);
-        browseBooksPage.setTitleField(searchTitle);
-        browseBooksPage.clickSearchBooksButton();
-        browseBooksPage.clickFirstResultTitle();
-
-        BookPage bookPage = page(BookPage.class);
+        BookPage bookPage = fetchBookPage(searchTitle);        
         bookPage.clickEditBookButton();
         
         EditBookPage editBookPage = page(EditBookPage.class);
@@ -78,6 +67,19 @@ public class BookHelper {
         // Other properties omitted for simplicity
         
         editBookPage.clickSaveBookButton();        
+    }
+    
+    public static void borrowBook(String searchTitle) {
         
+        BookPage bookPage = fetchBookPage(searchTitle);
+        bookPage.clickBorrowBookButton();
+        bookPage.clickConfirmDialogOKButton();
+    }
+    
+    public static void returnBook(String searchTitle) {
+        
+        BookPage bookPage = fetchBookPage(searchTitle);
+        bookPage.clickReturnBookButton();
+        bookPage.clickConfirmDialogOKButton();
     }
 }
